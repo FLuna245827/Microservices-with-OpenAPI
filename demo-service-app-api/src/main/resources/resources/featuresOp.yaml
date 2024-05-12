@@ -1,0 +1,58 @@
+get:
+  tags:
+  - Features
+  summary: Gets all the available features provided by this service
+  description: Returns a list of features
+  operationId: getFeatures
+  parameters:
+  - $ref: ../openapi.yaml#/components/parameters/apiKeyHeaderParam
+  - $ref: ../openapi.yaml#/components/parameters/authorizedIdHeaderParam
+  - name: X-Application-Client
+    in: header
+    description: The name of the client application using this service
+    required: true
+    schema:
+      type: string
+      example: ConsumerX
+  responses:
+    '200':
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: ../openapi.yaml#/components/schemas/ServiceFeatures
+    '401':
+      $ref: ../openapi.yaml#/components/responses/Unauthorized
+    '404':
+      $ref: ../openapi.yaml#/components/responses/NotFound
+put:
+  tags:
+    - Features
+  summary: Update the list of features and...
+  description: Update the list of features.
+  operationId: updateFeatures
+  parameters:
+    - name: userId
+      in: path
+      description: The user id
+      required: true
+      schema:
+        type: string
+        pattern: ^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$
+        example: 12345678-1234-1234-1234-123456789012
+    - $ref: ../openapi.yaml#/components/parameters/apiKeyHeaderParam
+    - $ref: ../openapi.yaml#/components/parameters/authorizedIdHeaderParam
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../openapi.yaml#/components/schemas/ServiceFeatures
+    description: A list of service_features to update
+    required: true
+  responses:
+    '200':
+      $ref: ../openapi.yaml#/components/responses/Ok
+    '400':
+      description: Invalid input or...
+    '401':
+      $ref: ../openapi.yaml#/components/responses/Unauthorized

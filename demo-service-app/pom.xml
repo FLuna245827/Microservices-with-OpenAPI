@@ -1,0 +1,247 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.x.openapi.template</groupId>
+		<artifactId>openapi-demo</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>demo-service-app</artifactId>
+	<name>Demo Service WebServices</name>
+
+	<packaging>jar</packaging>
+
+	<properties>
+		<app.profiles>prd,dev</app.profiles>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>log4j-over-slf4j</artifactId>
+				<version>${log4j-over-slf4j.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.x.openapi.template</groupId>
+			<artifactId>demo-service-app-api</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-log4j2</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<!--dependency>
+			<groupId>org.jadira.usertype</groupId>
+			<artifactId>usertype.core</artifactId>
+			<version>${usertype.core.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-hibernate4</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-joda</artifactId>
+		</dependency-->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.bull.javamelody</groupId>
+			<artifactId>javamelody-spring-boot-starter</artifactId>
+			<version>${javamelody-spring-boot-starter.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-aop</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<!-- Resteasy Client for Events -->
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-client</artifactId>
+		    <version>${resteasy-client.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring-boot.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<attach>false</attach><!-- Don't deploy/install yet on local/remote Maven repo -->
+					<profiles>${app.profiles}</profiles>
+					<mainClass>com.company.demo.rest.OpenApiGeneratorApplication</mainClass>
+					<layers>
+						<enabled>true</enabled>
+					</layers>
+					<layout>JAR</layout><!-- No WAR because the Spring Boot app has an embedded server -->
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>${jib-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>deploy</phase>
+						<goals>
+							<goal>${jib.goal}</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<from>
+						<image>adoptopenjdk:11-jre-hotspot</image>
+						<!--image>registry.somewhere.com/someplace/java17:latest</image-->
+					</from>
+					<to>
+						<image>${jib.to.image}</image>
+						<tags>
+							<tag>${project.version}</tag>
+						</tags>
+					</to>
+					<allowInsecureRegistries>true</allowInsecureRegistries><!-- Set to 'false' in order to use https -->
+					<extraDirectories>
+						<paths>
+							<path>
+								<from>${project.basedir}/src/main/resources</from><!-- Copy resource files to root dir -->
+							</path>
+						</paths>
+					</extraDirectories>
+					<containerizingMode>packaged</containerizingMode>
+					<container>
+						<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+						<args>
+							<arg>--spring.config.additional-location=file:/conf/um-config.properties</arg>
+							<arg>--logging.config=file:/conf/log4j2.xml</arg>
+						</args>
+						<jvmFlags>
+							<jvmFlag>-Dhome=/conf</jvmFlag>
+							<jvmFlag>-Xmx2g</jvmFlag>
+							<jvmFlag>-XX:+UseGCOverheadLimit</jvmFlag>
+							<jvmFlag>-XX:+UseStringDeduplication</jvmFlag>
+							<jvmFlag>-XX:+HeapDumpOnOutOfMemoryError</jvmFlag>
+							<jvmFlag>-XX:HeapDumpPath=/dumps</jvmFlag>
+							<jvmFlag>-XX:OnOutOfMemoryError='shutdown -r'</jvmFlag>
+						</jvmFlags>
+						<mainClass>com.x.usrmgmt.api.ws.OpenApiGeneratorApplication</mainClass>
+						<ports>
+							<port>8082</port>
+						</ports>
+						<volumes>
+							<volume>/conf</volume>
+							<volume>/logs</volume>
+						</volumes>
+					</container>
+					<!-- Run Docker container locally: docker run -it -p 8082:8082 -v C:/logs:/logs -v C:/data/um-api-ws/conf:/conf usr-mgmt-api-ws:1.3.3-CMP -->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>prd</id>
+			<properties>
+				<jib.goal>build</jib.goal><!-- build image and also push it to the respective repository -->
+				<jib.to.image>registry.somewhere.com/someplace/${project.artifactId}</jib.to.image>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>dev</id>
+			<properties>
+				<jib.goal>dockerBuild</jib.goal><!-- Build to local docker daemon -->
+				<jib.to.image>localhost:5000/${project.artifactId}:${project.version}</jib.to.image>
+			</properties>
+		</profile>
+	</profiles>
+</project>

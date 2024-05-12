@@ -1,0 +1,82 @@
+<project
+ xmlns="http://maven.apache.org/POM/4.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.x.openapi.template</groupId>
+	<artifactId>openapi-demo</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	<name>OpenAPI Template Demo</name>
+
+	<modules>
+		<module>demo-service-app-api</module>
+		<module>demo-service-app</module>
+	</modules>
+
+	<properties>
+		<project.version>1.0.0</project.version>
+
+		<!-- configs -->
+		<default.package>com.x.openapi.template.generated</default.package>
+
+		<project-encoding>UTF-8</project-encoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+
+		<!-- plugins versions -->
+		<jib-maven-plugin.version>3.4.2</jib-maven-plugin.version>
+		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+		<openapi-generator-maven-plugin.version>7.5.0</openapi-generator-maven-plugin.version>
+		<fmt-maven-plugin.version>2.23</fmt-maven-plugin.version>
+
+		<spring-boot.version>3.2.5</spring-boot.version>
+		<spring-security-core.version>6.2.4</spring-security-core.version>
+		
+		<swagger-models-v3.version>2.2.21</swagger-models-v3.version>
+		<swagger-models.version>1.6.14</swagger-models.version>
+
+		<springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
+		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+
+		<log4j-slf4j-impl.version>2.23.1</log4j-slf4j-impl.version>
+		<log4j-over-slf4j.version>2.0.13</log4j-over-slf4j.version>
+
+		<usertype.core.version>7.0.0.CR1</usertype.core.version>
+
+		<!-- bean validation plugins -->
+		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
+		<jakarta.annotation-api.version>3.0.0</jakarta.annotation-api.version>
+		<jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
+
+		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
+		<mysql-connector-j.version>8.4.0</mysql-connector-j.version>
+
+		<javamelody-spring-boot-starter.version>2.1.0</javamelody-spring-boot-starter.version>
+
+		<aspectj.version>1.9.22</aspectj.version>
+		<aspectj-maven-plugin.version>1.15.0</aspectj-maven-plugin.version>
+		
+		<resteasy-client.version>6.2.8.Final</resteasy-client.version>
+	</properties>
+	
+	<dependencyManagement>
+	</dependencyManagement>
+	
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Maven Compiler Plugin global configuration -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

@@ -1,0 +1,75 @@
+openapi: 3.0.1
+info:
+  description: Project's description
+  version: 1.0.0
+  title: Demo project with features for a service
+  contact:
+    email: architecture@x.com
+servers:
+- url: http://localhost:8082/
+  description: This is a demo server
+paths:
+  /rest/features:
+    $ref: './resources/featuresOp.yaml'
+  /selfTest:
+    $ref: './resources/selfTestOp.yaml'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+  schemas:
+    Error:
+      $ref: ./schemas/Error.yaml
+    ServiceFeatures:
+      $ref: ./schemas/ServiceFeatures.yaml
+  parameters:
+    apiKeyHeaderParam:
+      name: X-Api-Key
+      in: header
+      description: The API_KEY used for securing application-to-application requests
+      required: true
+      schema:
+        type: string
+        pattern: ^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$
+        example: 12345678-1234-1234-1234-123456789012
+    authorizedIdHeaderParam:
+      name: X-Authorized-UserId
+      in: header
+      description: The ID of an authorized user
+      required: true
+      schema:
+        type: string
+        pattern: '^\w{8}-\w{4}-\w{4}-\w{4}-\w{28}-\w{3}$'
+        example: 3364f273-2151-4cc6-aa24-bea40c503b1e16527063743041FR-DC1
+  responses:
+    Ok:
+      description: Ok
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: ./schemas/Error.yaml
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ./schemas/Error.yaml
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ./schemas/Error.yaml
+    ServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: ./schemas/Error.yaml
+security:
+- ApiKeyAuth: [
+    ]

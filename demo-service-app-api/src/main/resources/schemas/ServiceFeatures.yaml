@@ -1,0 +1,33 @@
+type: object
+properties:
+  id:
+    description: The UUID unique identifier
+    type: string
+    pattern: ^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$
+    example: 12345678-1234-1234-1234-123456789012
+  is_enabled:
+    description: Used to determine if the features are active or not
+    type: boolean
+    example: true
+  service_features:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          description: The feature UUID identifier.
+          type: string
+          pattern: ^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$
+          example: 12345678-1234-1234-1234-123456789012
+        status:
+          description: True if the feature has been enabled
+          type: boolean
+          example: true
+        type:
+          description: The feature type. One of 'Prod', 'Qal', or 'Dev env'
+          type: string
+          enum:
+            - Prod
+            - Qal
+            - Dev env
+          example: Dev env
